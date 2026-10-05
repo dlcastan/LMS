@@ -17,6 +17,10 @@ npm run db:seed              # curso de ejemplo (opcional)
 npm run dev                  # http://localhost:3000
 ```
 
+## Pagos con Mercado Pago
+
+Completar en `.env.local` `MERCADOPAGO_ACCESS_TOKEN`, `MERCADOPAGO_WEBHOOK_SECRET` y `APP_URL` (credenciales de prueba del panel de desarrolladores). Mercado Pago avisa los pagos a `POST /api/mercadopago/webhook`; en local hace falta exponer la app con un túnel (por ejemplo ngrok) y usar esa URL como `APP_URL`.
+
 ## Scripts
 
 - `npm run dev`: servidor de desarrollo

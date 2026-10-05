@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { decrypt } from "@/lib/session";
 
-const protectedPrefixes = ["/cuenta", "/cursos"];
+const protectedPrefixes = ["/cuenta", "/cursos", "/comprar"];
 const guestOnlyRoutes = ["/login", "/registro"];
 
 // Chequeo optimista: solo lee la cookie, sin consultar la base. La autorización
@@ -25,5 +25,5 @@ export default async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/cuenta", "/cursos/:path*", "/login", "/registro"],
+  matcher: ["/cuenta", "/cursos/:path*", "/comprar/:path*", "/login", "/registro"],
 };

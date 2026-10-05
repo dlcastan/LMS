@@ -118,3 +118,61 @@ export async function getMyLesson(
     watched: r.watched,
   };
 }
+
+export type CourseForSale = {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  priceCents: number;
+  currency: string;
+  owned: boolean;
+};
+
+function toCourseForSale(r: {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  price_cents: number;
+  currency: string;
+  owned: boolean;
+}): CourseForSale {
+  return {
+    id: r.id,
+    slug: r.slug,
+    title: r.title,
+    description: r.description,
+    priceCents: r.price_cents,
+    currency: r.currency,
+    owned: r.owned,
+  };
+}
+
+const FOR_SALE_SELECT = `
+  SELECT c.id, c.slug, c.title, c.description, c.price_cents, c.currency,
+         EXISTS (SELECT 1 FROM enrollments e
+                  WHERE e.course_id = c.id AND e.user_id = $1) AS owned
+    FROM courses c
+   WHERE c.price_cents > 0`;
+
+export async function getCourseForSale(
+  userId: string,
+  slug: string,
+): Promise<CourseForSale | null> {
+  const { rows } = await pool.query(`${FOR_SALE_SELECT} AND c.slug = $2`, [
+    userId,
+    slug,
+  ]);
+  return rows[0] ? toCourseForSale(rows[0]) : null;
+}
+
+// Cursos a la venta que el alumno todavía no tiene.
+export async function getAvailableCourses(
+  userId: string,
+): Promise<CourseForSale[]> {
+  const { rows } = await pool.query(`${FOR_SALE_SELECT} ORDER BY c.created_at`, [
+    userId,
+  ]);
+  return rows.map(toCourseForSale).filter((c) => !c.owned);
+}

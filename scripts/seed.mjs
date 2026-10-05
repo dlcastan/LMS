@@ -4,6 +4,9 @@ import pg from "pg";
 const course = {
   slug: "ia-aplicada-a-productos-digitales",
   title: "IA aplicada a productos digitales",
+  // Precio de ejemplo (en centavos): ARS 10.000,00.
+  priceCents: 1000000,
+  currency: "ARS",
   description:
     "Curso de ejemplo: cómo implementar IA dentro de un producto y cómo crear productos digitales usando IA.",
   lessons: [
@@ -30,10 +33,13 @@ await client.connect();
 try {
   await client.query("BEGIN");
   const { rows } = await client.query(
-    `INSERT INTO courses (slug, title, description) VALUES ($1, $2, $3)
-     ON CONFLICT (slug) DO UPDATE SET title = EXCLUDED.title, description = EXCLUDED.description
+    `INSERT INTO courses (slug, title, description, price_cents, currency)
+     VALUES ($1, $2, $3, $4, $5)
+     ON CONFLICT (slug) DO UPDATE
+       SET title = EXCLUDED.title, description = EXCLUDED.description,
+           price_cents = EXCLUDED.price_cents, currency = EXCLUDED.currency
      RETURNING id`,
-    [course.slug, course.title, course.description],
+    [course.slug, course.title, course.description, course.priceCents, course.currency],
   );
   const courseId = rows[0].id;
   for (const [i, lesson] of course.lessons.entries()) {
