@@ -13,6 +13,7 @@ npm install
 cp .env.example .env.local   # completar AUTH_SECRET (openssl rand -base64 32)
 docker compose up -d         # Postgres local en :5432
 npm run db:migrate           # aplica db/migrations
+npm run db:seed              # curso de ejemplo (opcional)
 npm run dev                  # http://localhost:3000
 ```
 
@@ -23,3 +24,5 @@ npm run dev                  # http://localhost:3000
 - `npm run start`: sirve el build
 - `npm run lint`: ESLint
 - `npm run db:migrate`: aplica las migraciones pendientes (lee `.env.local`)
+- `npm run db:seed`: carga un curso de ejemplo con 3 clases
+- `npm run db:enroll -- <email> <slug>`: solo desarrollo, da acceso a un curso sin comprarlo
