@@ -1,0 +1,15 @@
+# Postgres local para desarrollo. DATABASE_URL: postgres://lms:lms@localhost:5432/lms
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: lms
+      POSTGRES_PASSWORD: lms
+      POSTGRES_DB: lms
+    ports:
+      - "5432:5432"
+    volumes:
+      - lms-db:/var/lib/postgresql/data
+
+volumes:
+  lms-db:

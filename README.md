@@ -10,7 +10,9 @@ Next.js (App Router) · TypeScript · Postgres
 
 ```bash
 npm install
-cp .env.example .env.local   # completar los valores
+cp .env.example .env.local   # completar AUTH_SECRET (openssl rand -base64 32)
+docker compose up -d         # Postgres local en :5432
+npm run db:migrate           # aplica db/migrations
 npm run dev                  # http://localhost:3000
 ```
 
@@ -20,3 +22,4 @@ npm run dev                  # http://localhost:3000
 - `npm run build`: build de producción
 - `npm run start`: sirve el build
 - `npm run lint`: ESLint
+- `npm run db:migrate`: aplica las migraciones pendientes (lee `.env.local`)
